@@ -11,6 +11,7 @@
 ```bash
 git clone https://github.com/vlkttlv/University-department-information-system.git
 cd University-department-information-system
+cd university_department
 ```
 ### Создание виртуального окружения
 ```bash
