@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+
+{% block title %}Преподаватели - Информационная система кафедры{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Преподаватели кафедры</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'department:teacher_create' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Добавить преподавателя
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <div class="card-header">
+                Фильтры
+            </div>
+            <div class="card-body">
+                <form method="get">
+                    <div class="mb-3">
+                        <label for="employment_type" class="form-label">Тип занятости</label>
+                        <select class="form-select" id="employment_type" name="employment_type">
+                            <option value="">Все</option>
+                            <option value="full" {% if request.GET.employment_type == 'full' %}selected{% endif %}>Полная ставка</option>
+                            <option value="part" {% if request.GET.employment_type == 'part' %}selected{% endif %}>Неполная ставка</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="search" class="form-label">Поиск</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ request.GET.search }}" placeholder="ФИО или должность">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Применить</button>
+                </form>
+                
+                <hr>
+                
+                <div class="mt-3">
+                    <h6>Статистика:</h6>
+                    <ul class="list-unstyled">
+                        <li>Всего: {{ total_count }}</li>
+                        <li>Полная ставка: {{ full_time_count }}</li>
+                        <li>Неполная ставка: {{ part_time_count }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="row">
+            {% for teacher in teachers %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-4">
+                                {% if teacher.photo %}
+                                <img src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}" 
+                                     class="img-fluid rounded" style="max-height: 120px;">
+                                {% else %}
+                                <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                     style="width: 100px; height: 120px;">
+                                    <span class="text-muted">Нет фото</span>
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-8">
+                                <h5 class="card-title">
+                                    <a href="{% url 'department:teacher_detail' teacher.pk %}">
+                                        {{ teacher.last_name }} {{ teacher.first_name }} {{ teacher.middle_name }}
+                                    </a>
+                                </h5>
+                                <p class="card-text">
+                                    <strong>Должность:</strong> {{ teacher.position }}<br>
+                                    <strong>Ставка:</strong> {{ teacher.rate }}<br>
+                                    <strong>Тип:</strong> {{ teacher.get_employment_type_display_name }}<br>
+                                    {% if teacher.workplace %}
+                                    <strong>Аудитория:</strong> {{ teacher.workplace }}<br>
+                                    {% endif %}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <small class="text-muted">
+                            Дисциплин: {{ teacher.disciplines.count }} | 
+                            Доп. работ: {{ teacher.additional_works.count }}
+                        </small>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Преподаватели не найдены.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if is_paginated %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.employment_type %}&employment_type={{ request.GET.employment_type }}{% endif %}">Предыдущая</a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.employment_type %}&employment_type={{ request.GET.employment_type }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.employment_type %}&employment_type={{ request.GET.employment_type }}{% endif %}">Следующая</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

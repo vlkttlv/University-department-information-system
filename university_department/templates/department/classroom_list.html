@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Аудитории - Информационная система кафедры{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h2>Аудитории кафедры</h2>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{% url 'department:classroom_create' %}" class="btn btn-success">
+            <i class="fas fa-plus"></i> Добавить аудиторию
+        </a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="card mb-4">
+            <div class="card-header">
+                Фильтры
+            </div>
+            <div class="card-body">
+                <form method="get">
+                    <div class="mb-3">
+                        <label for="search" class="form-label">Поиск</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               value="{{ request.GET.search }}" placeholder="Номер аудитории">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Применить</button>
+                </form>
+                
+                <hr>
+                
+                <div class="mt-3">
+                    <h6>Статистика:</h6>
+                    <ul class="list-unstyled">
+                        <li>Всего аудиторий: {{ classrooms.count }}</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="row">
+            {% for classroom in classrooms %}
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-8">
+                                <h5 class="card-title">
+                                    <a href="{% url 'department:classroom_detail' classroom.pk %}">
+                                        Аудитория №{{ classroom.room_number }}
+                                    </a>
+                                </h5>
+                                <p class="card-text">
+                                    <strong>Вместимость:</strong> {{ classroom.capacity }} человек<br>
+                                    {% if classroom.description %}
+                                    <strong>Описание:</strong> {{ classroom.description|truncatechars:80 }}<br>
+                                    {% endif %}
+                                </p>
+                                <p class="card-text">
+                                    Закреплено за {{ classroom.teacher_count }} преподавателями
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <div class="alert alert-info">
+                    Аудитории не найдены.
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        
+        {% if is_paginated %}
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.floor %}&floor={{ request.GET.floor }}{% endif %}">Предыдущая</a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <li class="page-item active">
+                    <span class="page-link">{{ num }}</span>
+                </li>
+                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ num }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.floor %}&floor={{ request.GET.floor }}{% endif %}">{{ num }}</a>
+                </li>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if request.GET.search %}&search={{ request.GET.search }}{% endif %}{% if request.GET.floor %}&floor={{ request.GET.floor }}{% endif %}">Следующая</a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

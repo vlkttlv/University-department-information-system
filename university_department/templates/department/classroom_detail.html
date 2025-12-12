@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}Аудитория {{ classroom.room_number }} - Информационная система кафедры{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+      
+        <div class="card mb-4">
+            <div class="card-header">
+                Информация об аудитории
+            </div>
+            <div class="card-body">
+                <p><strong>Номер аудитории:</strong> {{ classroom.room_number }}</p>
+                <p><strong>Вместимость:</strong> {{ classroom.capacity }} человек</p>
+                {% if classroom.description %}
+                <p><strong>Описание:</strong> {{ classroom.description }}</p>
+                {% endif %}
+                {% if teachers %}
+                <p><strong>Закреплено за:</strong>
+                    {% for teacher in teachers %}
+                    <a href="{% url 'department:teacher_detail' teacher.pk %}" class="btn btn-sm btn-outline-primary">
+                    {{ teacher.last_name }} {{teacher.first_name}} {{teacher.middle_name }}</a>
+                </p>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 d-flex gap-2">
+    <a href="{% url 'department:classroom_list' %}" class="btn btn-primary">
+        ← Вернуться к списку аудиторий
+    </a>
+    <a href="{% url 'department:classroom_update' classroom.pk %}" class="btn btn-warning">
+        <i class="fas fa-edit"></i> Редактировать
+    </a>
+    <a href="{% url 'department:classroom_delete' classroom.pk %}" class="btn btn-danger">
+        <i class="fas fa-trash"></i> Удалить
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ discipline.name }} - Информационная система кафедры{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">        
+        <div class="card mb-4">
+            <div class="card-header">
+                Основная информация
+            </div>
+            <div class="card-body">
+                <p><strong>Название:</strong> {{ discipline.name }}</p>
+                <p><strong>Семестр:</strong> {{ discipline.semester }}</p>
+                <p><strong>Количество часов:</strong> {{ discipline.hours }}</p>
+                {% if discipline.description %}
+                <p><strong>Описание:</strong> {{ discipline.description }}</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Преподаватели дисциплины</h5>
+                <span class="badge bg-primary">{{ discipline.teacher_set.count }}</span>
+            </div>
+            <div class="card-body">
+                {% if discipline.teacher_set.all %}
+                <div class="row">
+                    {% for teacher in discipline.teacher_set.all %}
+                    <div class="col-md-6 mb-3">
+                        <div class="border rounded p-3">
+                            <div class="row">
+                                <div class="col-4">
+                                    {% if teacher.photo %}
+                                    <img src="{{ teacher.photo.url }}" alt="{{ teacher.full_name }}" 
+                                         class="img-fluid rounded" style="max-height: 80px;">
+                                    {% else %}
+                                    <div class="bg-light rounded d-flex align-items-center justify-content-center" 
+                                         style="width: 80px; height: 80px;">
+                                        <span class="text-muted">Нет фото</span>
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-8">
+                                    <h6>
+                                        <a href="{% url 'department:teacher_detail' teacher.pk %}">
+                                            {{ teacher.last_name }} {{ teacher.first_name }} {{ teacher.middle_name }}
+                                        </a>
+                                    </h6>
+                                    <p class="mb-1">
+                                        <small>
+                                            <strong>Должность:</strong> {{ teacher.position }}<br>
+                                            <strong>Ставка:</strong> {{ teacher.rate }}<br>
+                                            {% if teacher.workplace %}
+                                            <strong>Аудитория:</strong> {{ teacher.workplace.room_number }}
+                                            {% endif %}
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">На эту дисциплину не назначены преподаватели</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mt-4 d-flex gap-2">
+    <a href="{% url 'department:discipline_list' %}" class="btn btn-primary">
+        ← Вернуться к списку дисциплин
+    </a>
+    <a href="{% url 'department:discipline_update' discipline.pk %}" class="btn btn-warning">
+        <i class="fas fa-edit"></i> Редактировать
+    </a>
+    <a href="{% url 'department:discipline_delete' discipline.pk %}" class="btn btn-danger">
+        <i class="fas fa-trash"></i> Удалить
+    </a>
+</div>
+{% endblock %}

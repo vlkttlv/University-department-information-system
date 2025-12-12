@@ -1,0 +1,109 @@
+{% extends 'base.html' %}
+
+{% block title %}Главная - Информационная система кафедры{% endblock %}
+
+{% block content %}
+<div class="row">
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h4>Информационная система кафедры университета</h4>
+            </div>
+            <div class="card-body">
+                <p>Система предназначена для секретаря кафедры и обеспечивает централизованное управление всеми данными кафедры:</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-users fa-lg text-primary"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Преподавательский состав</h6>
+                                <p class="mb-0">Учет 25 преподавателей, включая работающих на полной и неполной ставке. Ведение личных данных, контактов, должностей и ученых степеней.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-door-open fa-lg text-success"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Рабочие места</h6>
+                                <p class="mb-0">Назначение уникальных преподавательских аудиторий каждому преподавателю. Контроль занятости и распределение рабочих мест.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-book fa-lg text-warning"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Учебные дисциплины</h6>
+                                <p class="mb-0">Ведение перечня преподаваемых дисциплин, распределение по семестрам и назначение преподавателей на дисциплины.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex mb-3">
+                            <div class="flex-shrink-0">
+                                <i class="fas fa-tasks fa-lg text-info"></i>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h6>Дополнительная нагрузка</h6>
+                                <p class="mb-0">Учет дополнительной работы преподавателей: кураторство, проведение практик, научное руководство, методическая работа и др.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h6>Основные возможности системы:</h6>
+                    <ul>
+                        <li>Полный учет кадрового состава кафедры</li>
+                        <li>Автоматическое распределение уникальных рабочих мест</li>
+                        <li>Управление учебной нагрузкой и дисциплинами</li>
+                        <li>Назначение и контроль дополнительной работы</li>
+                        <li>Поиск и фильтрация по всем данным</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="sidebar">
+            <h4 class="mb-4">Статистика кафедры</h4>
+            
+            <div class="stat-card">
+                <div class="stat-number">{{ total_teachers }}</div>
+                <div class="text-muted">Всего преподавателей</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">{{ full_time_teachers }}</div>
+                <div class="text-muted">На полной ставке</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">{{ part_time_teachers }}</div>
+                <div class="text-muted">На неполной ставке</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">{{ total_classrooms }}</div>
+                <div class="text-muted">Аудиторий</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-number">{{ total_disciplines }}</div>
+                <div class="text-muted">Дисциплин</div>
+            </div>
+
+        </div>
+    </div>
+</div>
+</div>
+{% endblock %}

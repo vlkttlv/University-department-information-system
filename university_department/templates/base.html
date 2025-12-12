@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Информационная система кафедры{% endblock %}</title>
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-green: #2e7d32;
+            --light-green: #4caf50;
+            --dark-green: #1b5e20;
+            --lighter-green: #c8e6c9;
+            --bg-green: #f1f8e9;
+        }
+        
+        body {
+            background-color: var(--bg-green);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .navbar {
+            background-color: var(--primary-green) !important;
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        
+        .navbar-brand, .nav-link {
+            color: white !important;
+        }
+        
+        .nav-link:hover {
+            color: var(--lighter-green) !important;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary-green);
+            border-color: var(--dark-green);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--dark-green);
+            border-color: var(--primary-green);
+        }
+        
+        .card {
+            border: 1px solid var(--lighter-green);
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(46, 125, 50, 0.1);
+        }
+        
+        .card-header {
+            background-color: var(--lighter-green);
+            color: var(--dark-green);
+            font-weight: bold;
+        }
+        
+        .table th {
+            background-color: var(--lighter-green);
+            color: var(--dark-green);
+        }
+        
+        .footer {
+            background-color: var(--primary-green);
+            color: white;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-left: 4px solid var(--primary-green);
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+        }
+        
+        .stat-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-green);
+        }
+        
+        .badge-green {
+            background-color: var(--light-green);
+            color: white;
+        }
+        
+        .sidebar {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,.05);
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            color: var(--dark-green);
+        }
+        
+        a {
+            color: var(--primary-green);
+        }
+        
+        a:hover {
+            color: var(--dark-green);
+        }
+    </style>
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <!-- Навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'department:home' %}">
+                <strong>Кафедра Университета</strong>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'department:home' %}">Главная</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'department:teacher_list' %}">Преподаватели</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'department:classroom_list' %}">Аудитории</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'department:discipline_list' %}">Дисциплины</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-plus"></i> Добавить
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'department:teacher_create' %}">Преподавателя</a></li>
+                            <li><a class="dropdown-item" href="{% url 'department:classroom_create' %}">Аудиторию</a></li>
+                            <li><a class="dropdown-item" href="{% url 'department:discipline_create' %}">Дисциплину</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="{% url 'department:additional_work_type_create' %}">Тип доп. работы</a></li>
+                            <li><a class="dropdown-item" href="{% url 'department:teacher_additional_work_create' %}">Назначить доп. работу</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                            <i class="fas fa-cog"></i> Управление
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'department:additional_work_type_list' %}">Типы доп. работ</a></li>
+                            <li><a class="dropdown-item" href="{% url 'department:teacher_additional_work_list' %}">Назначенные работы</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/admin/" target="_blank">Админ-панель</a></li>
+                        </ul>
+                    </li>
+                </ul>
+                
+                <form class="d-flex" action="{% url 'department:teacher_list' %}" method="get">
+                    <input class="form-control me-2" type="search" name="search" placeholder="Поиск преподавателя">
+                    <button class="btn btn-outline-light" type="submit">Найти</button>
+                </form>
+            </div>
+        </div>
+    </nav>
+    <!-- После навигационной панели и перед основным содержимым в base.html: -->
+    <main class="container mt-4">
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    
+    <!-- Футер -->
+    <footer class="footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <h5>Информационная система кафедры</h5>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>© {% now "Y" %} Университет. Все права защищены.</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

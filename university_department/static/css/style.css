@@ -1,0 +1,51 @@
+/* Дополнительные стили для зеленой темы */
+
+/* Кастомные классы */
+.bg-green-light {
+    background-color: #f1f8e9;
+}
+
+.bg-green-dark {
+    background-color: #1b5e20;
+}
+
+.text-green {
+    color: #2e7d32;
+}
+
+.border-green {
+    border-color: #4caf50 !important;
+}
+
+/* Адаптивные улучшения */
+@media (max-width: 768px) {
+    .sidebar {
+        margin-bottom: 20px;
+    }
+    
+    .stat-card {
+        margin-bottom: 15px;
+    }
+}
+
+/* Анимации */
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(46, 125, 50, 0.2);
+}
+
+/* Кастомные кнопки */
+.btn-outline-green {
+    color: #2e7d32;
+    border-color: #2e7d32;
+}
+
+.btn-outline-green:hover {
+    color: white;
+    background-color: #2e7d32;
+    border-color: #2e7d32;
+}
